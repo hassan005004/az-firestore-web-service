@@ -5,7 +5,10 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  doc
+  doc,
+  or,
+  where,
+  and
 } from "firebase/firestore";
 import { db } from "./firebase";
 import firebaseService from "./services/firebaseService";
@@ -19,19 +22,49 @@ const App = () => {
 
   // READ
   const fetchUsers = async () => {
-    const data = await firebaseService("users").populate(["profileRef"]).get();
-    setUsers(data);
+    // const data = await firebaseService("users").populate(["profileRef"]).get();
+    // setUsers(data);
+
+    // const data1 = await firebaseService("users")
+    //   .where("name", "name1")
+    //   .where("fname", "fname1")
+    //   .get();
+
+    const data1 = await firebaseService("users")
+      .where((q) => q.where("fname", "==", 'fname1').orWhere("fname", "==", 'fname1'))
+      .where("name", "==", "name1")
+      .get();
+
+
+    // const data1 = await firebaseService("users").raw(and(or(
+    //   where("fname", "==", "fname1"),
+    //   where("fname", "==", "fname2")
+    // ),
+    // where("name", "==", "name1")));
+
+    setUsers(data1);
+
+    // const data2 = await firebaseService("users")
+    //   .where((q) => {
+    //     q.where("city", "like", "new%").orWhere("name", "like", "%ss%");
+    //   })
+    //   .get();
+    // setUsers(data2);
+
+
     // const data = await getDocs(usersCollection);
     // setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
 
   useEffect(() => {
+    // createUser();
     fetchUsers();
   }, []);
 
   // CREATE
   const createUser = async () => {
-    await firebaseService("users").insert({ "name": name });
+    await firebaseService("users").insert({ "name": "name", "fname": "fname" });
+    await firebaseService("users").insert({ "name": "name1", "fname": "fname1" });
     
     // await addDoc(usersCollection, { name });
 
@@ -65,7 +98,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Firestore CRUD</h1>
+      <h1>Firestore Service</h1>
 
       <input
         value={name}
@@ -77,7 +110,7 @@ const App = () => {
       <ul>
         {users.map((user) => (
           <li key={user.id}>
-            {user.name}{" "}
+            {user.name}{" "}{user.fname}
             <button onClick={() => updateUser(user.id)}>
               Update
             </button>{" "}
@@ -86,6 +119,7 @@ const App = () => {
         ))}
       </ul>
 
+      <div>Auth Service Example</div>
 
       <AuthScreen />
     </div>
