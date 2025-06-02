@@ -1,0 +1,13 @@
+npm in firebase
+npm install -g firebase-tools
+
+create new project if not
+firebase init -> 
+--- initilized firestore then go to error link and create database
+--- production mode ???
+
+exitising project
+firebase init -> use exisitng project
+
+create firebase.js file and put cofiguration
+
