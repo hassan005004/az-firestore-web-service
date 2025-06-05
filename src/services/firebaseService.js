@@ -440,7 +440,6 @@ const firebaseService = (collectionName, documentId) => {
     return api;
   };
 
-
   // api.ref = async (relationPath, relationData) => {
   //   if (!lastInsertedOrUpdated || !lastInsertedOrUpdated.id) {
   //     throw new Error("Call insert or update before ref()");
